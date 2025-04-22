@@ -5,7 +5,7 @@ meta {
 }
 
 post {
-  url: {{url_base}}/login
+  url: {{url_base}}/auth/login
   body: multipartForm
   auth: none
 }
@@ -20,4 +20,8 @@ body:json {
 body:multipart-form {
   username: user@example.com
   password: secret
+}
+
+script:post-response {
+  bru.setEnvVar("access_token", res.body.access_token)
 }
