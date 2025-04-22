@@ -1,0 +1,9 @@
+{
+  "version": "1",
+  "name": "forms anyware api",
+  "type": "collection",
+  "ignore": [
+    "node_modules",
+    ".git"
+  ]
+}

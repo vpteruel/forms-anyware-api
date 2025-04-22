@@ -1,0 +1,23 @@
+meta {
+  name: login
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{url_base}}/login
+  body: multipartForm
+  auth: none
+}
+
+body:json {
+  {
+    "email": "test@test.com",
+    "password": "secret"
+  }
+}
+
+body:multipart-form {
+  username: user@example.com
+  password: secret
+}
