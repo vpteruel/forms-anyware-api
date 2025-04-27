@@ -2,9 +2,11 @@ from datetime import datetime
 from typing import Optional
 from pydantic import BaseModel
 
-class PurchaseRequisitionType(BaseModel):
+class FlowVersion(BaseModel):
     id: int
-    name: str
+    flow_id: int
+    version: int
+    is_active: bool
+    effective_from: str
     created_at: Optional[datetime]
     updated_at: Optional[datetime]
-    deleted_at: Optional[datetime]

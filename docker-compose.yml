@@ -1,0 +1,40 @@
+version: '3.8'
+
+services:
+  api:
+    build: .
+    ports:
+      - "5000:5000"
+    environment:
+      - DATABASE_URL=mysql+pymysql://user:password@db:3306/hpha
+      - JWT_SECRET_KEY=your-secret-key-change-this-in-production
+      - ENVIRONMENT=development
+    volumes:
+      - .:/app
+    depends_on:
+      - db
+    command: >
+      sh -c "uvicorn main:app --reload --host 0.0.0.0 --port 5000"
+    networks:
+      - app-network
+
+  db:
+    image: mysql:8.0
+    environment:
+      - MYSQL_DATABASE=hpha
+      - MYSQL_USER=user
+      - MYSQL_PASSWORD=password
+      - MYSQL_ROOT_PASSWORD=rootpassword
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./db/schema.sql:/docker-entrypoint-initdb.d/schema.sql
+    networks:
+      - app-network
+
+volumes:
+  mysql_data:
+
+networks:
+  app-network:

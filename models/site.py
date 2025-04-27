@@ -1,3 +1,4 @@
+from datetime import datetime
 from typing import Optional
 from pydantic import BaseModel
 
@@ -6,6 +7,6 @@ class Site(BaseModel):
     name: str
     mnemonic: str
     location: str
-    created_at: Optional[str]
-    updated_at: Optional[str]
-    deleted_at: Optional[str]
+    created_at: Optional[datetime]
+    updated_at: Optional[datetime]
+    deleted_at: Optional[datetime]

@@ -2,9 +2,12 @@ from datetime import datetime
 from typing import Optional
 from pydantic import BaseModel
 
-class PurchaseRequisitionType(BaseModel):
+class FlowApprovalRules(BaseModel):
     id: int
-    name: str
+    flow_version_id: int
+    role_id: int
+    approval_level: int
+    min_amount: float
+    max_amount: float
     created_at: Optional[datetime]
     updated_at: Optional[datetime]
-    deleted_at: Optional[datetime]

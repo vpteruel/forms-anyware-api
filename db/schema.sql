@@ -80,20 +80,6 @@ insert into sites (name, mnemonic, location) values
     ('St. Marys Memorial Hospital', 'SMMH', 'St. Marys'),
     ('Clinton Public Hospital', 'CPH', 'Clinton');
 
--- Purpose: Create a table to store the flow status.
-create table requisition_status (
-    id bigint unsigned primary key,
-    name varchar(255) not null,
-    unique key unique_requisition_status (name)
-);
-
-insert into requisition_status (id, name) values
-    (1, 'Draft'),
-    (2, 'Pending'),
-    (3, 'Approved'),
-    (4, 'Rejected'),
-    (5, 'Cancelled');
-
 -- Purpose: Create a table to store the flows for the requisition approvals.
 create table flows (
     id bigint unsigned auto_increment primary key,
@@ -147,6 +133,20 @@ insert into requisition_types (name, code) values
     ('Purchase Requisition', 'PR'),
     ('Personal Expense', 'PE'),
     ('Travel Expense', 'TE');
+
+-- Purpose: Create a table to store the flow status.
+create table requisition_status (
+    id bigint unsigned primary key,
+    name varchar(255) not null,
+    unique key unique_requisition_status (name)
+);
+
+insert into requisition_status (id, name) values
+    (1, 'Draft'),
+    (2, 'Pending'),
+    (3, 'Approved'),
+    (4, 'Rejected'),
+    (5, 'Cancelled');
 
 -- Purpose: Create a generic requisitions table
 create table requisitions (
