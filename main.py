@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from routers import auth, health, users
+from controllers import auth, health, users
 
 app = FastAPI(title="Forms Anyware API")
 
@@ -7,7 +7,6 @@ app = FastAPI(title="Forms Anyware API")
 app.include_router(auth)
 app.include_router(health)
 app.include_router(users)
-# app.include_router(forms.router)
 
 if __name__ == "__main__":
     import uvicorn
