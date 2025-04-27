@@ -111,6 +111,8 @@ create table flow_approval_rules (
     approval_level int not null,
     min_amount decimal(15, 2) not null,
     max_amount decimal(15, 2) not null,
+    can_skip tinyint(1) not null default 0,
+    skip_reason_required tinyint(1) not null default 1,
     created_at timestamp default current_timestamp,
     updated_at timestamp default current_timestamp on update current_timestamp,
     foreign key (flow_version_id) references flow_versions(id),
@@ -143,10 +145,12 @@ create table requisition_status (
 
 insert into requisition_status (id, name) values
     (1, 'Draft'),
-    (2, 'Pending'),
-    (3, 'Approved'),
-    (4, 'Rejected'),
-    (5, 'Cancelled');
+    (2, 'In Progress'),
+    (3, 'Pending'),
+    (4, 'Approved'),
+    (5, 'Rejected'),
+    (6, 'Cancelled'),
+    (7, 'Skipped');
 
 -- Purpose: Create a generic requisitions table
 create table requisitions (
@@ -182,12 +186,17 @@ create table requisition_approvals (
     status_id bigint unsigned not null,
     comments text,
     decision_date timestamp null,
+    skipped tinyint(1) not null default 0,
+    skip_reason varchar(500),
+    skipped_by_user_id bigint unsigned null,
+    skipped_at timestamp null,
     created_at timestamp default current_timestamp,
     updated_at timestamp default current_timestamp on update current_timestamp,
     foreign key (requisition_id) references requisitions(id),
     foreign key (role_id) references roles(id),
     foreign key (approver_id) references users(id),
-    foreign key (status_id) references requisition_status(id)
+    foreign key (status_id) references requisition_status(id),
+    foreign key (skipped_by_user_id) references users(id),
 );
 
 -- Purchase Requisition Specific Tables

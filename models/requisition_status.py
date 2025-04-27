@@ -2,10 +2,12 @@ from enum import Enum
 
 class RequisitionStatus(Enum):
     DRAFT = 1
-    PENDING = 2
-    APPROVED = 3
-    REJECTED = 4
-    CANCELLED = 5
+    IN_PROGRESS = 2
+    PENDING = 3
+    APPROVED = 4
+    REJECTED = 5
+    CANCELLED = 6
+    SKIPPED = 7
 
     @classmethod
     def get_status(cls, status_id: int) -> str:

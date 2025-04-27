@@ -9,5 +9,7 @@ class FlowApprovalRules(BaseModel):
     approval_level: int
     min_amount: float
     max_amount: float
+    can_skip: bool
+    skip_reason_required: bool
     created_at: Optional[datetime]
     updated_at: Optional[datetime]
