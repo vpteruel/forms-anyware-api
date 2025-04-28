@@ -40,8 +40,9 @@ async def login(form_data: OAuth2PasswordRequestForm = Depends()):
         "email": user.email,
         "first_name": user.first_name,
         "last_name": user.last_name,
-        "full_name": user.full_name,
-        "username": user.username
+        "username": user.username,
+        "is_sys_admin": user.is_sys_admin,
+        "last_login": user.last_login,
     }
 
     # Set expiration times

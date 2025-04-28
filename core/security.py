@@ -18,10 +18,14 @@ fake_users_db = {
         "id": 1,
         "first_name": "First",
         "last_name": "Last",
-        "full_name": "First Last",
         "username": "first.last",
         "email": "user@example.com",
         "password": "$2b$12$EixZaYVK1fsbw1ZfbX3OXePaWxn96p36WQoeG6Lruj3vjPGga31lW",  # "secret"
+        "is_sys_admin": True,
+        "last_login": None,
+        "created_at": datetime.utcnow(),
+        "updated_at": datetime.utcnow(),
+        "deleted_at": None,
     }
 }
 
@@ -75,8 +79,9 @@ def create_id_token(user_data: dict, expires_delta: Optional[timedelta] = None):
         "email": user_data.get("email"),
         "first_name": user_data.get("first_name"),
         "last_name": user_data.get("last_name"),
-        "full_name": user_data.get("full_name"),
         "username": user_data.get("username"),
+        "is_sys_admin": user_data.get("is_sys_admin"),
+        "last_login": user_data.get("last_login"),
     }
     to_encode.update({"profile": profile_data})
 

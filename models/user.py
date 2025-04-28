@@ -9,7 +9,7 @@ class User(BaseModel):
     username: Optional[str]
     email: str
     password: Optional[str]
-    is_admin: bool
+    is_sys_admin: bool
     last_login: Optional[datetime]
     created_at: Optional[datetime]
     updated_at: Optional[datetime]

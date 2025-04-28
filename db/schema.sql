@@ -11,7 +11,7 @@ create table users (
     username varchar(255),
     email varchar(255) not null,
     password varchar(255) not null,
-    is_admin tinyint(1) not null default 0,
+    is_sys_admin tinyint(1) not null default 0,
     last_login timestamp,
     created_at timestamp default current_timestamp,
     updated_at timestamp default current_timestamp on update current_timestamp,

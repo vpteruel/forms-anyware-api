@@ -1,6 +1,6 @@
-from routers.auth import router as auth_router
-from routers.health import router as health_router
-from routers.users import router as users_router
+from controllers.auth import router as auth_router
+from controllers.health import router as health_router
+from controllers.users import router as users_router
 
 # Expose routers directly
 auth = auth_router
