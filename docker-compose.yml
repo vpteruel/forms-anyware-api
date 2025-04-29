@@ -1,4 +1,4 @@
-version: '3.8'
+version: "3.9"
 
 services:
   api:
@@ -19,14 +19,14 @@ services:
       - app-network
 
   db:
-    image: mysql:8.0
+    image: mysql:latest
     environment:
       - MYSQL_DATABASE=hpha
       - MYSQL_USER=user
       - MYSQL_PASSWORD=password
       - MYSQL_ROOT_PASSWORD=rootpassword
     ports:
-      - "3306:3306"
+      - "3307:3306"
     volumes:
       - mysql_data:/var/lib/mysql
       - ./db/schema.sql:/docker-entrypoint-initdb.d/schema.sql

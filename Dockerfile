@@ -2,15 +2,26 @@ FROM python:3.11-slim
 
 WORKDIR /app
 
-# Install system dependencies
+# Install system dependencies including apt-utils
 RUN apt-get update && apt-get install -y --no-install-recommends \
+    apt-utils \
     build-essential \
     curl \
+    man-db \
     && rm -rf /var/lib/apt/lists/*
 
-# Copy requirements first to leverage Docker cache
-COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+# Create a non-root user
+RUN addgroup --system app && adduser --system --group app
+USER app
+
+# Use a virtual environment
+RUN python -m venv /app/venv
+ENV PATH="/app/venv/bin:$PATH"
+
+# Install dependencies as non-root user
+COPY --chown=app:app requirements.txt .
+RUN pip install --no-cache-dir --upgrade pip && \
+    pip install --no-cache-dir -r requirements.txt
 
 # Copy application code
 COPY . .
