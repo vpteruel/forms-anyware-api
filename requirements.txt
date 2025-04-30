@@ -4,6 +4,9 @@ httpx
 python-jose[cryptography]
 passlib[bcrypt]
 python-multipart
-pymysql
 python-dotenv
+pydantic[email]
 pydantic-settings
+pymysql
+sqlalchemy
+alembic

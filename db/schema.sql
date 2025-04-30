@@ -1,4 +1,3 @@
-create database hpha;
 use hpha;
 
 -- Common tables
@@ -18,6 +17,9 @@ create table users (
     deleted_at timestamp,
     unique key unique_users (email)
 );
+
+insert into users (first_name, last_name, username, email, password, is_sys_admin) values
+    ('System', 'Administrator', 'admin', 'user@example.com', '$2b$12$EixZaYVK1fsbw1ZfbX3OXePaWxn96p36WQoeG6Lruj3vjPGga31lW', 1);
 
 -- Purpose: Create a table to store the departments.
 create table departments (
@@ -196,7 +198,7 @@ create table requisition_approvals (
     foreign key (role_id) references roles(id),
     foreign key (approver_id) references users(id),
     foreign key (status_id) references requisition_status(id),
-    foreign key (skipped_by_user_id) references users(id),
+    foreign key (skipped_by_user_id) references users(id)
 );
 
 -- Purchase Requisition Specific Tables

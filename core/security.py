@@ -23,23 +23,6 @@ pwd_context = CryptContext(
     bcrypt__rounds=12  # Explicitly set rounds
 )
 
-# This is a mock user database for demonstration
-fake_users_db = {
-    "user@example.com": {
-        "id": 1,
-        "first_name": "First",
-        "last_name": "Last",
-        "username": "first.last",
-        "email": "user@example.com",
-        "password": "$2b$12$EixZaYVK1fsbw1ZfbX3OXePaWxn96p36WQoeG6Lruj3vjPGga31lW",  # "secret"
-        "is_sys_admin": True,
-        "last_login": None,
-        "created_at": datetime.utcnow(),
-        "updated_at": datetime.utcnow(),
-        "deleted_at": None,
-    }
-}
-
 def verify_password(plain_password, hashed_password):
     return pwd_context.verify(plain_password, hashed_password)
 
@@ -47,18 +30,36 @@ def get_password_hash(password):
     return pwd_context.hash(password)
 
 def get_user(db, email: str):
-    if email in db:
-        user_dict = db[email]
-        return UserInDB(**user_dict)
+    """Get a user by email from the database"""
+    from sqlalchemy.orm import Session
+    from models.orm_models import User
+    
+    return db.query(User).filter(
+        User.email == email,
+        User.deleted_at.is_(None)
+    ).first()
 
-def authenticate_user(email: str, password: str):
-    user = get_user(fake_users_db, email)
-
+def authenticate_user(db, email: str, password: str):
+    """Authenticate a user against the database"""
+    from sqlalchemy.orm import Session
+    from models.orm_models import User
+    
+    # Query the user with the provided email
+    user = db.query(User).filter(
+        User.email == email,
+        User.deleted_at.is_(None)
+    ).first()
+    
+    # Check if user exists and password is correct
     if not user:
         return False
     if not verify_password(password, user.password):
         return False
-
+    
+    # Update last login timestamp
+    user.last_login = datetime.utcnow()
+    db.commit()
+    
     return user
 
 def create_id_token(user_data: dict, expires_delta: Optional[timedelta] = None):
@@ -177,11 +178,20 @@ def get_current_active_user(current_user: Dict[str, Any] = Depends(get_current_u
 
 def get_current_admin_user(current_user: Dict[str, Any] = Depends(get_current_user)) -> Dict[str, Any]:
     """Ensure the user is an admin"""
-    if not current_user.get("is_sys_admin", False):  # Default to False if not specified
-        raise HTTPException(
-            status_code=status.HTTP_403_FORBIDDEN,
-            detail="Not enough permissions",
-        )
+    # First check direct claim (from access token)
+    if current_user.get("is_sys_admin", False):
+        return current_user
+        
+    # If not found directly, check in profile (from ID token)
+    profile = current_user.get("profile", {})
+    if profile.get("is_sys_admin", False):
+        return current_user
+        
+    # Not an admin
+    raise HTTPException(
+        status_code=status.HTTP_403_FORBIDDEN,
+        detail="Not enough permissions",
+    )
     return current_user
 
 def get_user_from_request(request: Request) -> Optional[Dict[str, Any]]:
